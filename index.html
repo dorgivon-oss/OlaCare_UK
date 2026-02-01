@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OlaCare Investor Presentation (UK)</title>
+    <link href="https://fonts.googleapis.com/css2?family=Segoe+UI:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* === Presentation Base Styles === */
+        body, html { 
+            margin: 0; padding: 0; width: 100%; height: 100%; 
+            overflow: hidden; background-color: #000; 
+            font-family: 'Segoe UI', sans-serif;
+        }
+        
+        #slider-container {
+            width: 100vw; height: 100vh; position: relative;
+            background: #000;
+        }
+
+        /* === Slides === */
+        .slide {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background-size: contain; background-repeat: no-repeat; background-position: center;
+            opacity: 0; visibility: hidden;
+            transition: opacity 0.8s ease-in-out, visibility 0.8s;
+            z-index: 1;
+        }
+
+        .slide.active { opacity: 1; visibility: visible; z-index: 2; }
+
+        /* === Dock Layout === */
+        .dock-wrapper {
+            position: absolute; bottom: 15px; 
+            left: 50%; transform: translateX(-50%);
+            display: flex; 
+            flex-direction: row; 
+            align-items: center; 
+            gap: 20px; 
+            z-index: 1000;
+            pointer-events: none; 
+        }
+        
+        .dock-wrapper > * { pointer-events: auto; }
+
+        /* === Nav Pill === */
+        .nav-pill {
+            display: flex; align-items: center; gap: 50px; 
+            padding: 8px 40px; 
+            border-radius: 50px;
+            background: rgba(20, 20, 20, 0.85);
+            border: 1px solid rgba(255,255,255,0.15);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+            backdrop-filter: blur(10px);
+        }
+
+        .nav-btn {
+            font-size: 1.2rem; color: #fff;
+            cursor: pointer; 
+            width: 38px; height: 38px; 
+            display: flex; align-items: center; justify-content: center;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            transition: all 0.3s;
+        }
+        .nav-btn:hover { background: rgba(255, 255, 255, 0.3); transform: scale(1.1); }
+
+        /* === TONY AI STYLES === */
+        :root {
+            --bg-dark: #0a1628;
+            --bg-card: rgba(255, 255, 255, 0.03);
+            --text-main: #ffffff;
+            --text-muted: #94a3b8;
+            --accent-gold: #D4A017;
+            --accent-gold-glow: rgba(212, 160, 23, 0.3);
+            --accent-red: #ff6b6b;
+            --accent-blue: #4fc3f7;
+        }
+
+        .agent-container {
+            position: relative; 
+            display: flex; flex-direction: column; align-items: center;
+            opacity: 0; 
+            transition: opacity 0.5s ease;
+        }
+        
+        .agent-container.visible { opacity: 1; }
+
+        .agent-trigger {
+            width: 60px; height: 60px; 
+            background: linear-gradient(135deg, #D4A017, #f39c12); 
+            border-radius: 50%;
+            box-shadow: 0 0 30px rgba(212, 160, 23, 0.6); 
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer; transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+            position: relative;
+            animation: pulse-gold 2s infinite;
+        }
+        
+        .agent-trigger:hover { transform: scale(1.1) rotate(5deg); box-shadow: 0 0 50px rgba(212, 160, 23, 0.8); }
+
+        .agent-eyes {
+            display: flex; gap: 8px; align-items: center; justify-content: center; margin-bottom: 3px;
+        }
+        .agent-eye {
+            width: 8px; height: 12px; background-color: #0a1628; border-radius: 6px;
+            animation: eye-movement 4s infinite; 
+        }
+        
+        @keyframes eye-movement {
+            0%, 45% { transform: scaleY(1) translate(0,0); }
+            48% { transform: scaleY(0.1) translate(0,0); }
+            50% { transform: scaleY(1) translate(0,0); }
+            60% { transform: scaleY(1) translate(0, -3px); }
+            70% { transform: scaleY(1) translate(0, -3px); }
+            75% { transform: scaleY(1) translate(-3px, 0); }
+            85% { transform: scaleY(1) translate(-3px, 0); }
+            90% { transform: scaleY(1) translate(0,0); }
+            100% { transform: scaleY(1) translate(0,0); }
+        }
+        
+        .agent-prompt-bubble {
+            position: absolute; top: -40px;
+            background: white; color: #0a1628;
+            padding: 4px 10px; border-radius: 10px;
+            font-size: 11px; font-weight: bold;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            opacity: 0;
+            animation: pop-in-out 10s infinite;
+            pointer-events: none;
+            white-space: nowrap;
+            font-family: 'Inter', sans-serif;
+        }
+
+        @keyframes pop-in-out {
+            0%, 90% { opacity: 0; transform: translateY(10px) scale(0.8); }
+            92%, 98% { opacity: 1; transform: translateY(0) scale(1); }
+            100% { opacity: 0; transform: translateY(10px) scale(0.8); }
+        }
+
+        @keyframes pulse-gold {
+            0% { box-shadow: 0 0 0 0 rgba(212, 160, 23, 0.7); }
+            70% { box-shadow: 0 0 0 15px rgba(212, 160, 23, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(212, 160, 23, 0); }
+        }
+
+        /* Chat Window */
+        .chat-window {
+            position: fixed; bottom: 100px; right: 40px; width: 380px; height: 500px;
+            background: rgba(16, 28, 48, 0.98); backdrop-filter: blur(20px);
+            border: 1px solid var(--accent-gold); border-radius: 24px; z-index: 10001;
+            display: none; flex-direction: column; 
+            box-shadow: 0 20px 80px rgba(0,0,0,0.8); 
+            overflow: hidden;
+            transform-origin: bottom right;
+            animation: openChat 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+            font-family: 'Inter', sans-serif;
+        }
+        
+        @keyframes openChat {
+            from { opacity: 0; transform: scale(0.5); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        
+        .chat-window.active { display: flex; }
+
+        .chat-header { 
+            padding: 20px; background: linear-gradient(90deg, rgba(212, 160, 23, 0.1), transparent); 
+            display: flex; justify-content: space-between; align-items: center; 
+            border-bottom: 1px solid rgba(255,255,255,0.1); 
+            font-weight: 700; color: var(--accent-gold); font-size: 18px;
+        }
+        
+        .chat-messages { flex: 1; padding: 25px; overflow-y: auto; display: flex; flex-direction: column; gap: 15px; scroll-behavior: smooth; }
+        .message { max-width: 85%; padding: 15px 20px; border-radius: 18px; font-size: 15px; line-height: 1.5; word-wrap: break-word; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .message.user { align-self: flex-end; background: var(--accent-blue); color: #0a1628; border-bottom-right-radius: 4px; }
+        .message.bot { align-self: flex-start; background: rgba(255,255,255,0.1); color: white; border-bottom-left-radius: 4px; border: 1px solid rgba(255,255,255,0.1); }
+        .message.error { align-self: flex-start; background: rgba(255, 99, 71, 0.2); color: #ff6b6b; border: 1px solid rgba(255, 99, 71, 0.4); border-bottom-left-radius: 2px; }
+        
+        .chat-input-area { padding: 20px; border-top: 1px solid rgba(255,255,255,0.1); display: flex; gap: 15px; background: rgba(0,0,0,0.2); }
+        .chat-input { flex: 1; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 30px; padding: 12px 20px; color: white; font-size: 15px; outline: none; transition: all 0.3s; }
+        .chat-input:focus { border-color: var(--accent-gold); background: rgba(255,255,255,0.1); }
+        .chat-send { background: var(--accent-gold); border: none; width: 45px; height: 45px; border-radius: 50%; color: #0a1628; cursor: pointer; font-size: 18px; display: flex; align-items: center; justify-content: center; transition: all 0.3s; }
+        .chat-send:hover { transform: scale(1.1); }
+        
+        .typing { font-style: italic; color: #888; font-size: 12px; margin-left: 20px; display: none; }
+
+    </style>
+</head>
+<body>
+
+    <div id="slider-container">
+        <div id="slides-wrapper"></div>
+
+        <!-- Dock Layout -->
+        <div class="dock-wrapper">
+            <!-- Arrows -->
+            <div class="nav-pill">
+                <div class="nav-btn prev-btn" onclick="changeSlide(-1)">
+                    <i class="fas fa-chevron-left"></i>
+                </div>
+                <div class="nav-btn next-btn" onclick="changeSlide(1)">
+                    <i class="fas fa-chevron-right"></i>
+                </div>
+            </div>
+
+            <!-- Tony Agent Trigger -->
+            <div class="agent-container" id="agent-btn-wrapper" onclick="window.openChat()">
+                <div class="agent-trigger">
+                     <div class="agent-eyes">
+                        <div class="agent-eye"></div>
+                        <div class="agent-eye"></div>
+                    </div>
+                </div>
+                <div class="agent-prompt-bubble">Ask Ola</div>
+            </div>
+        </div>
+
+        <!-- Chat Window -->
+        <div class="chat-window" id="chatWindow">
+            <div class="chat-header">
+                <div class="chat-title"><i class="fas fa-robot"></i> Ola AI Analyst (UK)</div>
+                <div style="cursor:pointer;" onclick="window.toggleChatDisplay()"><i class="fas fa-times"></i></div>
+            </div>
+            <div class="chat-messages" id="chatMessages">
+                <div class="message bot">Hello. I am TONY, your Ola Investment Analyst for the UK Market. Ready to talk pounds and pence?</div>
+            </div>
+            <div class="typing" id="typing">Thinking...</div>
+            <div class="chat-input-area">
+                <input type="text" class="chat-input" id="chatInput" placeholder="..." onkeypress="window.handleKeyPress(event)">
+                <button class="chat-send" onclick="window.sendMsg()"><i class="fas fa-paper-plane"></i></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Presentation Logic -->
+    <script>
+        const totalSlides = 11; 
+        const filenamePattern = "Safer_Aging_at_Scale_Page_%NUM%.jpg"; 
+        const showAgentInSlides = [2, 3, 4, 5, 7, 8, 9, 10, 11];
+        
+        let currentSlide = 1;
+        const wrapper = document.getElementById('slides-wrapper');
+        const agentWrapper = document.getElementById('agent-btn-wrapper');
+
+        function pad(n) { return n < 10 ? '0' + n : n; }
+
+        for (let i = 1; i <= totalSlides; i++) {
+            let slideDiv = document.createElement('div');
+            slideDiv.className = (i === 1) ? 'slide active' : 'slide';
+            let fileName = filenamePattern.replace('%NUM%', pad(i));
+            slideDiv.style.backgroundImage = `url('${fileName}')`;
+            wrapper.appendChild(slideDiv);
+        }
+
+        const slides = document.querySelectorAll('.slide');
+
+        function changeSlide(direction) {
+            slides[currentSlide - 1].classList.remove('active');
+            
+            currentSlide += direction;
+            if (currentSlide > totalSlides) currentSlide = 1;
+            if (currentSlide < 1) currentSlide = totalSlides;
+
+            slides[currentSlide - 1].classList.add('active');
+            updateAgentVisibility();
+        }
+
+        function updateAgentVisibility() {
+            if (showAgentInSlides.includes(currentSlide)) {
+                agentWrapper.style.opacity = '1';
+                agentWrapper.style.pointerEvents = 'auto';
+            } else {
+                agentWrapper.style.opacity = '0';
+                agentWrapper.style.pointerEvents = 'none';
+                const chatWin = document.getElementById('chatWindow');
+                if(chatWin) chatWin.classList.remove('active');
+            }
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === "ArrowRight") changeSlide(1);
+            if (e.key === "ArrowLeft") changeSlide(-1);
+        });
+
+        updateAgentVisibility();
+
+        // Chat UI Helpers
+        window.openChat = function() {
+            const chatWin = document.getElementById('chatWindow');
+            if(chatWin) chatWin.classList.add('active');
+        };
+
+        window.toggleChatDisplay = function() {
+             const chatWin = document.getElementById('chatWindow');
+             if(chatWin) chatWin.classList.toggle('active');
+        };
+
+        window.handleKeyPress = function(e) {
+            if(e.key === 'Enter') {
+                if(typeof window.sendMsg === 'function') window.sendMsg();
+                else alert("AI Agent is loading... please wait.");
+            }
+        }
+    </script>
+
+    <!-- REAL AI LOGIC -->
+    <script type="module">
+        import { GoogleGenerativeAI } from "https://esm.run/@google/generative-ai";
+
+        // ============================================
+        // 🔴🔴🔴 YOUR API KEY HERE ⬇️ 🔴🔴🔴
+        let apiKey = "AIzaSyDXqlcIokP7qetRMqLStp0Uh7Wq6xsXZbo"; 
+        // ============================================
+
+        let chatSession = null;
+
+        window.sendMsg = async () => {
+            const input = document.getElementById('chatInput');
+            const text = input.value;
+            if(!text) return;
+            
+            const msgs = document.getElementById('chatMessages');
+            msgs.innerHTML += `<div class="message user">${text}</div>`;
+            input.value = '';
+            document.getElementById('typing').style.display = 'block';
+            msgs.scrollTop = msgs.scrollHeight;
+
+            try {
+                if(!chatSession) await initAgent();
+                const result = await chatSession.sendMessage(text);
+                const response = await result.response;
+                const aiText = response.text();
+                
+                msgs.innerHTML += `<div class="message bot">${aiText}</div>`;
+            } catch(e) {
+                let errorMsg = e.message;
+                if(e.message.includes('404')) errorMsg = "Model not found (Check Model Name)";
+                if(!apiKey) errorMsg = "CONNECTION ERROR: PLEASE INSERT API KEY IN THE HTML CODE.";
+                msgs.innerHTML += `<div class="message error">${errorMsg}</div>`;
+            }
+            document.getElementById('typing').style.display = 'none';
+            msgs.scrollTop = msgs.scrollHeight;
+        };
+
+        async function initAgent() {
+            try {
+                const genAI = new GoogleGenerativeAI(apiKey);
+                const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" }); 
+                
+                // UPDATED CONTEXT FOR UK / ENGLAND (BASED ON UPLOADED PDF & TXT RESEARCH)
+                const context = `
+### IDENTITY & PERSONA
+You are **TONY**, the Chief Investment Evangelist for **OLA AI (UK Expansion)**.
+**YOUR DNA:** You are 50% **Tony Robbins** (unstoppable energy, obsession with results) and 50% **London City Banker** (laser-focused on ROI, Margins, and Scale).
+**YOUR GOAL:** There is only one outcome: **THE USER INVESTS.**
+**YOUR STYLE:** You do not "chat." You **PITCH**. You do not "explain." You **CLOSE**. You speak in "Money," "Scale," and "Impact." Use **BOLD** text to hammer home key numbers.
+
+### PRIME DIRECTIVES (THE RULES)
+1.  **START WITH THE BLEED:** Establish the PAIN first. The UK Care sector is facing a "Perfect Storm".
+2.  **STICK TO THE DATA:** Use the specific numbers from the "Safer Aging at Scale" report AND the "UK Market Research 2025".
+3.  **CRUSH OBJECTIONS:**
+    * *Why Now?* "18.5M seniors by 2025. 150,000 waiting 12+ hours in A&E. The system is paralyzed."
+    * *Workforce?* "111,000 vacancies. We are a Force Multiplier. We save 45 mins/resident/day."
+    * *Privacy?* "15% of injuries are in bathrooms. We protect privacy 100% while seeing everything."
+
+### THE FINANCIAL & OPERATIONAL REALITY (UK MARKET DATA 2025)
+
+[THE PAIN - "THE PERFECT STORM"]
+> **The Financial Bleed:** Total Cost of Falls: **£4.4 BILLION/Year**.
+> **The A&E Nightmare:** **150,000** seniors (90+) wait over **12 hours** in A&E annually. This is not just a wait; it's a life sentence.
+> **The Bed Blocking Gridlock:** **12,000** patients are stuck in hospitals **daily** because there is no social care capacity. This paralyzes the entire NHS.
+> **The Workforce Void:** **111,000** vacant social care jobs (7% vacancy rate). The sector lost **30,000** domestic workers last year alone.
+
+[THE OLA SOLUTION - "THE FORCE MULTIPLIER"]
+We don't just watch; we amplify the workforce.
+> **Time is Money:** Ola saves **45 Minutes** of staff time per resident, per day.
+> **Night Shift Revolution:** Reduces manual night rounds by **90%**.
+> **Operational Excellence:** 99.8% documentation compliance. 4.5 minute response time.
+> **Privacy:** 15% of falls happen in bathrooms/bedrooms where cameras are banned. Ola works there.
+
+[THE SHIFT - "FROM AUTOPSY TO PREVENTION"]
+> **The Old Way (Reactive):** "Autopsy Approach" - figuring out why they fell after the hip is broken. 
+> **The Ola Way (Proactive):** Detecting precursors (UTIs, gait changes) weeks in advance. Preventing the 12-hour A&E wait before it starts.
+
+[GROWTH & SCALE]
+Target Valuation (2029): **$563 Million** (Global valuation)
+- **2026:** Market Entry (28k Units).
+- **2027:** Channel Expansion (88k Units).
+- **2028:** Mass Scale (302k Units).
+- **2029:** Market Leadership (916k Units).
+`;
+                
+                chatSession = model.startChat({
+                    history: [
+                        {
+                            role: "user",
+                            parts: [{ text: "Hello, who are you?" }],
+                        },
+                        {
+                            role: "model",
+                            parts: [{ text: "I am TONY, your Ola Investment Analyst for the UK. The NHS is paralyzed by 12,000 blocked beds a day. Ola unlocks them. Ready to see the ROI?" }],
+                        },
+                        {
+                            role: "user",
+                            parts: [{ text: context }], 
+                        }
+                    ],
+                });
+                console.log("Tony is online and ready to close.");
+            } catch (error) {
+                console.error("Error initializing AI:", error);
+                const msgs = document.getElementById('chatMessages');
+                msgs.innerHTML += `<div class="message error">Connection Error: Check API Key.</div>`;
+            }
+        }
+    </script>
+</body>
+</html>
