@@ -313,10 +313,9 @@
         window.onload = function() {
             setTimeout(() => {
                 if(!window.moduleLoaded) {
-                    // If module logic failed to attach to window.sendMsg
                     window.sendMsg = function() {
                          const msgs = document.getElementById('chatMessages');
-                         msgs.innerHTML += `<div class="message error">SYSTEM ERROR: Syntax Error in Code. Please check how you pasted the API keys (quotes are important!). Check Console (F12) for details.</div>`;
+                         msgs.innerHTML += `<div class="message error">SYSTEM ERROR: Syntax Error. Did you redeclare variables? Check how you pasted the 5 parts.</div>`;
                     }
                 }
             }, 1000);
@@ -327,26 +326,26 @@
     <script type="module">
         import { GoogleGenerativeAI } from "https://esm.run/@google/generative-ai";
 
-
         // ============================================
-        // 🔴🔴🔴 הדבק כאן את המפתח המפוצל 🔴🔴🔴
+        // 🔴🔴🔴 הדבק כאן את המפתח המפוצל (5 חלקים) 🔴🔴🔴
         // ============================================
         
-        // חלק 1: התחלה (למשל AIzaSy...)
-        const part1 = "AIzaSy";         
+        // חלק 1: התחלה
+        const part1 = "AIzaS";         
         
-        // חלק 2: אמצע
-        const part2 = "Ab7w7923HxUairsYU3";        
+        // חלק 2
+        const part2 = "yAb7w79";        
         
-        // חלק 3: סוף
-        const part3 = "yjeqst";  
-		
-        // חלק 4 סוף
-        const part3 = "Pgin"; 		
-		
-		// חלק 5 סוף
-        const part3 = "TEIXQ"; 
+        // חלק 3
+        const part3 = "23HxUairs";      
 
+        // חלק 4
+        const part4 = "YU3yjeqstPgin";
+
+        // חלק 5
+        const part5 = "TEIXQ";
+
+        // הפונקציה מחברת את כל החלקים (1+2+3+4+5)
         function getAPIKey() {
             return part1 + part2 + part3 + part4 + part5;
         }
@@ -370,7 +369,6 @@
             try {
                 if(!chatSession) await initAgent();
                 
-                // Double check session exists
                 if(!chatSession) throw new Error("Could not create chat session");
 
                 const result = await chatSession.sendMessage(text);
@@ -405,7 +403,7 @@
                 const genAI = new GoogleGenerativeAI(finalKey);
                 const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" }); 
                 
-                // UPDATED CONTEXT FOR UK / ENGLAND (BASED ON UPLOADED PDF & TXT RESEARCH)
+                // UPDATED CONTEXT FOR UK / ENGLAND
                 const context = `
 ### IDENTITY & PERSONA
 You are **TONY**, the Chief Investment Evangelist for **OLA AI (UK Expansion)**.
