@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <!-- MOBILE VIEWPORT FIX (מונע זום ומקבע גובה) -->
+    <!-- MOBILE VIEWPORT FIX -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>OlaCare Investor Presentation (UK)</title>
     <link href="https://fonts.googleapis.com/css2?family=Segoe+UI:wght@300;400;600;700&display=swap" rel="stylesheet">
@@ -15,7 +15,7 @@
             margin: 0; padding: 0; width: 100%; height: 100%; 
             overflow: hidden; background-color: #000; 
             font-family: 'Segoe UI', sans-serif;
-            touch-action: pan-y; /* מאפשר גלילה אנכית במידת הצורך אך מונע זום */
+            touch-action: pan-y;
         }
         
         #slider-container {
@@ -34,7 +34,7 @@
 
         .slide.active { opacity: 1; visibility: visible; z-index: 2; }
 
-        /* === Nav Pill (Default) === */
+        /* === Nav Pill === */
         .nav-pill {
             display: flex; align-items: center; gap: 50px; 
             padding: 8px 40px; 
@@ -56,7 +56,7 @@
         }
         .nav-btn:hover { background: rgba(255, 255, 255, 0.3); transform: scale(1.1); }
 
-        /* === TONY AI STYLES (Default) === */
+        /* === TONY AI STYLES === */
         :root {
             --bg-dark: #0a1628;
             --bg-card: rgba(255, 255, 255, 0.03);
@@ -118,14 +118,9 @@
         
         .typing { font-style: italic; color: #888; font-size: 12px; margin-left: 20px; display: none; }
 
-
-        /* ========================================= */
-        /* === תיקוני מובייל מתקדמים (NEW CSS) === */
-        /* ========================================= */
-
-        /* 1. DOCK מקובע ומוגדר מחדש */
+        /* === MOBILE FIXES === */
         .dock-wrapper {
-            position: fixed; /* שינוי קריטי לאנדרואיד */
+            position: fixed; 
             bottom: 30px; 
             left: 50%; transform: translateX(-50%);
             display: flex; gap: 20px; 
@@ -135,12 +130,10 @@
         }
         .dock-wrapper > * { pointer-events: auto; }
 
-        /* 2. אנימציות טוני (עיניים, הילה, בועה) */
         .agent-trigger {
             width: 50px; height: 50px; 
             background: linear-gradient(135deg, #D4A017, #f39c12); 
             border-radius: 50%;
-            /* הילה חזקה */
             box-shadow: 0 0 20px rgba(255, 215, 0, 0.8), inset 0 0 10px rgba(255,255,255,0.6); 
             display: flex; align-items: center; justify-content: center;
             cursor: pointer; position: relative;
@@ -148,7 +141,6 @@
         }
 
         .agent-eyes { display: flex; gap: 6px; margin-bottom: 2px; }
-        
         .agent-eye {
             width: 6px; height: 10px; background-color: #0a1628; border-radius: 3px;
             animation: new-eye-sequence 8s infinite; transform-origin: center;
@@ -161,7 +153,6 @@
             font-size: 13px; font-weight: 800;
             box-shadow: 0 4px 15px rgba(255, 255, 255, 0.4);
             opacity: 0;
-            /* מופיע פעם ב-24 שניות (כל 3 סבבי עיניים) */
             animation: pop-in-out 24s infinite ease-in-out; 
             pointer-events: none; white-space: nowrap;
             border: 2px solid #FFD700;
@@ -172,7 +163,6 @@
             border-width: 6px 6px 0; border-style: solid; border-color: white transparent transparent transparent;
         }
 
-        /* 3. Keyframes (הגדרת התנועה) */
         @keyframes aggressive-pulse {
             0% { box-shadow: 0 0 0 0 rgba(255, 215, 0, 0.8); }
             50% { box-shadow: 0 0 25px 8px rgba(255, 215, 0, 0.4); }
@@ -181,16 +171,16 @@
 
         @keyframes new-eye-sequence {
             0% { transform: translate(0, 0) scaleY(1); }
-            10% { transform: translate(0, -4px) scaleY(1); } /* למעלה */
-            12% { transform: translate(0, -4px) scaleY(0.1); } /* מצמוץ */
+            10% { transform: translate(0, -4px) scaleY(1); } 
+            12% { transform: translate(0, -4px) scaleY(0.1); }
             14% { transform: translate(0, -4px) scaleY(1); }
-            25% { transform: translate(0, 0) scaleY(1); } /* מרכז */
-            27% { transform: translate(0, 0) scaleY(0.1); } /* מצמוץ */
+            25% { transform: translate(0, 0) scaleY(1); }
+            27% { transform: translate(0, 0) scaleY(0.1); }
             29% { transform: translate(0, 0) scaleY(1); }
-            40% { transform: translate(-3px, -3px) scaleY(1); } /* שמאלה למעלה */
-            42% { transform: translate(-3px, -3px) scaleY(0.1); } /* מצמוץ */
+            40% { transform: translate(-3px, -3px) scaleY(1); }
+            42% { transform: translate(-3px, -3px) scaleY(0.1); }
             44% { transform: translate(-3px, -3px) scaleY(1); }
-            55%, 100% { transform: translate(0, 0) scaleY(1); } /* המתנה */
+            55%, 100% { transform: translate(0, 0) scaleY(1); }
         }
 
         @keyframes pop-in-out {
@@ -199,19 +189,17 @@
             100% { opacity: 0; transform: translateY(10px) scale(0.8); }
         }
 
-        /* 4. התאמות למסכים קטנים (Media Query) */
         @media (max-width: 768px) {
             .dock-wrapper {
                 position: fixed; 
-                bottom: 15vh; /* הרמה משמעותית מעל הסרגל של אנדרואיד */
+                bottom: 15vh; 
                 padding-bottom: env(safe-area-inset-bottom);
             }
             .chat-window {
                 width: 90vw; height: 50vh; 
-                right: 5vw; bottom: 25vh; /* מעל ה-Dock */
+                right: 5vw; bottom: 25vh; 
                 z-index: 10005;
             }
-            /* הגדלת אזורי לחיצה */
             .nav-btn { width: 40px; height: 40px; }
             .agent-trigger { width: 50px; height: 50px; }
         }
@@ -231,4 +219,266 @@
                     <i class="fas fa-chevron-left"></i>
                 </div>
                 <div class="nav-btn next-btn" onclick="changeSlide(1)">
-                    <i class="fas fa-chevron
+                    <i class="fas fa-chevron-right"></i>
+                </div>
+            </div>
+
+            <!-- Tony Agent Trigger -->
+            <div class="agent-container" id="agent-btn-wrapper" onclick="window.openChat()">
+                <div class="agent-trigger">
+                     <div class="agent-eyes">
+                        <div class="agent-eye"></div>
+                        <div class="agent-eye"></div>
+                    </div>
+                </div>
+                <div class="agent-prompt-bubble">Ask Ola</div>
+            </div>
+        </div>
+
+        <!-- Chat Window -->
+        <div class="chat-window" id="chatWindow">
+            <div class="chat-header">
+                <div class="chat-title"><i class="fas fa-robot"></i> Ola AI Analyst (UK)</div>
+                <div style="cursor:pointer;" onclick="window.toggleChatDisplay()"><i class="fas fa-times"></i></div>
+            </div>
+            <div class="chat-messages" id="chatMessages">
+                <div class="message bot">Hello. I am TONY, your Ola Investment Analyst. Ready to maximize returns?</div>
+            </div>
+            <div class="typing" id="typing">Thinking...</div>
+            <div class="chat-input-area">
+                <input type="text" class="chat-input" id="chatInput" placeholder="..." onkeypress="window.handleKeyPress(event)">
+                <button class="chat-send" onclick="window.sendMsg()"><i class="fas fa-paper-plane"></i></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Presentation Logic -->
+    <script>
+        const totalSlides = 11; 
+        const filenamePattern = "Safer_Aging_at_Scale_Page_%NUM%.jpg"; 
+        const showAgentInSlides = [2, 3, 4, 5, 7, 8, 9, 10, 11];
+        
+        let currentSlide = 1;
+        const wrapper = document.getElementById('slides-wrapper');
+        const agentWrapper = document.getElementById('agent-btn-wrapper');
+
+        function pad(n) { return n < 10 ? '0' + n : n; }
+
+        for (let i = 1; i <= totalSlides; i++) {
+            let slideDiv = document.createElement('div');
+            slideDiv.className = (i === 1) ? 'slide active' : 'slide';
+            let fileName = filenamePattern.replace('%NUM%', pad(i));
+            slideDiv.style.backgroundImage = `url('${fileName}')`;
+            wrapper.appendChild(slideDiv);
+        }
+
+        const slides = document.querySelectorAll('.slide');
+
+        function changeSlide(direction) {
+            slides[currentSlide - 1].classList.remove('active');
+            
+            currentSlide += direction;
+            if (currentSlide > totalSlides) currentSlide = 1;
+            if (currentSlide < 1) currentSlide = totalSlides;
+
+            slides[currentSlide - 1].classList.add('active');
+            updateAgentVisibility();
+        }
+
+        function updateAgentVisibility() {
+            if (showAgentInSlides.includes(currentSlide)) {
+                agentWrapper.style.opacity = '1';
+                agentWrapper.style.pointerEvents = 'auto';
+            } else {
+                agentWrapper.style.opacity = '0';
+                agentWrapper.style.pointerEvents = 'none';
+                const chatWin = document.getElementById('chatWindow');
+                if(chatWin) chatWin.classList.remove('active');
+            }
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === "ArrowRight") changeSlide(1);
+            if (e.key === "ArrowLeft") changeSlide(-1);
+        });
+
+        updateAgentVisibility();
+
+        // Chat UI Helpers
+        window.openChat = function() {
+            const chatWin = document.getElementById('chatWindow');
+            if(chatWin) chatWin.classList.add('active');
+        };
+
+        window.toggleChatDisplay = function() {
+             const chatWin = document.getElementById('chatWindow');
+             if(chatWin) chatWin.classList.toggle('active');
+        };
+
+        window.handleKeyPress = function(e) {
+            if(e.key === 'Enter') {
+                if(typeof window.sendMsg === 'function') window.sendMsg();
+                else alert("System is initializing... Try again in a moment.");
+            }
+        }
+
+        // === SWIPE SUPPORT ===
+        let touchStartX = 0;
+        let touchEndX = 0;
+        const sliderContainer = document.getElementById('slider-container');
+
+        sliderContainer.addEventListener('touchstart', e => {
+            touchStartX = e.changedTouches[0].screenX;
+        }, {passive: true});
+
+        sliderContainer.addEventListener('touchend', e => {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        }, {passive: true});
+
+        function handleSwipe() {
+            if (touchEndX < touchStartX - 50) changeSlide(1); 
+            if (touchEndX > touchStartX + 50) changeSlide(-1); 
+        }
+    </script>
+    
+    <!-- FALLBACK ERROR HANDLER if Module Fails -->
+    <script>
+        window.moduleLoaded = false;
+        window.onload = function() {
+            setTimeout(() => {
+                if(!window.moduleLoaded) {
+                    window.sendMsg = function() {
+                         const msgs = document.getElementById('chatMessages');
+                         msgs.innerHTML += `<div class="message error">SYSTEM ERROR: Syntax Error. Did you redeclare variables? Check how you pasted the 5 parts.</div>`;
+                    }
+                }
+            }, 1000);
+        }
+    </script>
+
+    <!-- REAL AI LOGIC -->
+    <script type="module">
+        import { GoogleGenerativeAI } from "https://esm.run/@google/generative-ai";
+
+        // ============================================
+        // 🔴🔴🔴 הדבק כאן את המפתח המפוצל (5 חלקים) 🔴🔴🔴
+        // ============================================
+        
+        // חלק 1
+        const part1 = "";         
+        
+        // חלק 2
+        const part2 = "";        
+        
+        // חלק 3
+        const part3 = "";      
+
+        // חלק 4
+        const part4 = "";
+
+        // חלק 5
+        const part5 = "";
+
+        // הפונקציה מחברת את כל החלקים
+        function getAPIKey() {
+            return part1 + part2 + part3 + part4 + part5;
+        }
+        // ============================================
+
+        let chatSession = null;
+
+        // Main Send Function
+        async function sendMsg() {
+            console.log("Send button clicked...");
+            const input = document.getElementById('chatInput');
+            const text = input.value;
+            if(!text) return;
+            
+            const msgs = document.getElementById('chatMessages');
+            msgs.innerHTML += `<div class="message user">${text}</div>`;
+            input.value = '';
+            document.getElementById('typing').style.display = 'block';
+            msgs.scrollTop = msgs.scrollHeight;
+
+            try {
+                if(!chatSession) await initAgent();
+                
+                if(!chatSession) throw new Error("Could not create chat session");
+
+                const result = await chatSession.sendMessage(text);
+                const response = await result.response;
+                const aiText = response.text();
+                
+                msgs.innerHTML += `<div class="message bot">${aiText}</div>`;
+            } catch(e) {
+                console.error("AI Error:", e);
+                let errorMsg = e.message;
+                
+                if(e.message.includes('404')) errorMsg = "Model not found (Check Model Name)";
+                
+                const finalKey = getAPIKey();
+                if(!finalKey || finalKey.length < 10) {
+                     errorMsg = "CONNECTION ERROR: API KEY IS MISSING OR INVALID.";
+                }
+
+                msgs.innerHTML += `<div class="message error">${errorMsg}</div>`;
+            }
+            document.getElementById('typing').style.display = 'none';
+            msgs.scrollTop = msgs.scrollHeight;
+        };
+
+        async function initAgent() {
+            try {
+                const finalKey = getAPIKey();
+                
+                if (!finalKey) throw new Error("No API Key Provided");
+
+                const genAI = new GoogleGenerativeAI(finalKey);
+                const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" }); 
+                
+                // UPDATED CONTEXT: UK + SHORT ANSWERS
+                const context = `
+### IDENTITY
+You are **TONY**, Ola AI's Investment Analyst (UK).
+**STYLE:** Bold, Direct, Financial.
+**RULE:** KEEP ANSWERS SHORT. MAX 2-3 SENTENCES. NO FLUFF.
+
+### DATA (UK)
+* **Problem:** Falls cost UK £4.4Bn/yr. 150k seniors wait 12h+ in A&E.
+* **Solution:** Ola saves 45 min/resident/day. 90% less night rounds.
+* **Privacy:** We monitor bathrooms (15% of falls) without cameras.
+* **Valuation:** Target $563M by 2029.
+
+### GOAL
+Convince the investor to buy. Be punchy.
+`;
+                
+                chatSession = model.startChat({
+                    history: [
+                        {
+                            role: "user",
+                            parts: [{ text: "Hello" }],
+                        },
+                        {
+                            role: "model",
+                            parts: [{ text: "I am TONY. The UK spends £4.4Bn on falls. Ola stops the bleeding. Ready to invest?" }],
+                        },
+                        {
+                            role: "user",
+                            parts: [{ text: context }], 
+                        }
+                    ],
+                });
+                console.log("Tony is online.");
+            } catch (error) {
+                console.error("Error initializing AI:", error);
+                throw error; 
+            }
+        }
+
+        window.sendMsg = sendMsg;
+        window.moduleLoaded = true; 
+    </script>
+</body>
+</html>
